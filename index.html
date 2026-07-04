@@ -3,13 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 1시간마다 자동 새로고침: 이미지 교체 시 TV에 자동 반영 -->
 <meta http-equiv="refresh" content="3600">
-<title>LAKE VIEW MENU 1</title>
+<title>LAKE VIEW - DRINK MENU</title>
 <style>
-  *{margin:0;padding:0}
-  html,body{width:100%;height:100%;overflow:hidden;background:#f2efe9;cursor:none}
-  img{width:100%;height:100%;object-fit:contain;display:block}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body {
+    width:100%; height:100%;
+    overflow:hidden;
+    background:#f2efe9; /* 메뉴판 배경색과 동일 */
+    cursor:none;         /* TV에서 마우스 커서 숨김 */
+  }
+
+  /* ── 슬라이드 ── */
+  .slide {
+    position:absolute; top:0; left:0;
+    width:100%; height:100%;
+    opacity:0;
+    transition:opacity 1.2s ease-in-out;
+  }
+  .slide.on { opacity:1; }
+  .slide img {
+    width:100%; height:100%;
+    object-fit:contain;   /* TV 비율이 달라도 잘리지 않게 */
+    display:block;
+  }
+
+  /* ── 하단 진행 표시 (점 3개) ── */
+  .dots {
+    position:absolute; bottom:1.5vh; left:50%;
+    transform:translateX(-50%);
+    display:flex; gap:1vw;
+    z-index:10;
+  }
+  .dots span {
+    width:1vw; height:1vw; min-width:8px; min-height:8px;
+    border-radius:50%;
+    background:rgba(0,0,0,.15);
+    transition:background .4s;
+  }
+  .dots span.on { background:#f5a623; }
 </style>
 </head>
-<body><img src="1.jpg" alt="menu"></body>
+<body>
+
+  <div class="slide on"><img src="1.jpg" alt="커피 메뉴"></div>
+  <div class="slide"><img src="2.jpg" alt="에이드 스무디 메뉴"></div>
+  <div class="slide"><img src="3.jpg" alt="차 메뉴"></div>
+
+  <div class="dots">
+    <span class="on"></span><span></span><span></span>
+  </div>
+
+<script>
+  // ── 설정: 페이지당 머무는 시간(초) ──
+  var DURATION = 10;
+
+  var slides = document.querySelectorAll('.slide');
+  var dots = document.querySelectorAll('.dots span');
+  var current = 0;
+
+  function next() {
+    slides[current].className = 'slide';
+    dots[current].className = '';
+    current = (current + 1) % slides.length;
+    slides[current].className = 'slide on';
+    dots[current].className = 'on';
+  }
+
+  setInterval(next, DURATION * 1000);
+</script>
+
+</body>
 </html>
